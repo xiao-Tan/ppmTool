@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectService {
 
-    @Autowired // ?????????????????
+    @Autowired
     private ProjectRepository projectRepository;
 
     public Project saveOrUpdateProject(Project project){
