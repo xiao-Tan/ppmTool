@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
@@ -20,14 +24,24 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+
+
     @PostMapping("")
     public ResponseEntity<?> createdNewProject(@Valid @RequestBody Project project, BindingResult result){
 
+        //clear the error messages
         if(result.hasErrors()){
-            return new ResponseEntity<String>("Invalid Project Object", HttpStatus.BAD_REQUEST);
+            Map<String,String> errorMap = new HashMap<>();
+            //result.getFieldErrors() return type is List<FieldError>
+            //Loop through List<FieldError>
+            for (FieldError error: result.getFieldErrors()){
+                //.put(key,value),add to Map
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
 
-        Project project1 = projectService.saveOrUpdateProject(project); //add and save to database. project1 doing??????
+        Project project1 = projectService.saveOrUpdateProject(project); //add and save to database.
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 
