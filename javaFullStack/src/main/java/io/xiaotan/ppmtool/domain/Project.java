@@ -1,6 +1,5 @@
 package io.xiaotan.ppmtool.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
