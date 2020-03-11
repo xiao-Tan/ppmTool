@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+//change class to className
 //check name attribute input field(确保form里的name与Project Object一致)
 //create constructor
 //set state
