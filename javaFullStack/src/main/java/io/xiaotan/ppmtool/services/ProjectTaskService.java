@@ -47,4 +47,8 @@ public class ProjectTaskService {
         return projectTaskRepository.save(projectTask);
     }
 
+    public Iterable<ProjectTask> findAllTaskById(String project_id){
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(project_id);
+    }
+
 }
