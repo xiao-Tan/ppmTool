@@ -31,7 +31,7 @@ public class ProjectController {
         }
 
         Project project1 = projectService.saveOrUpdateProject(project); //add and save to database.
-        return new ResponseEntity<Project>(project, HttpStatus.CREATED);
+        return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectID}")
