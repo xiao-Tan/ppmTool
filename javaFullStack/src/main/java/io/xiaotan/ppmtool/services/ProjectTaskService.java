@@ -94,4 +94,19 @@ public class ProjectTaskService {
         return projectTask;
     }
 
+    //update project task
+    public ProjectTask updateTaskBySequence(ProjectTask updatedTask, String backlog_id, String project_sequence){
+        //use function above, do the same validation
+        ProjectTask projectTask = findOneTaskBySequence(backlog_id,project_sequence);
+        projectTask = updatedTask;
+        projectTaskRepository.save(projectTask);
+        return projectTask;
+    }
+
+    //delete project task
+    public void deleteTask(String backlog_id, String project_sequence){
+        ProjectTask projectTask = findOneTaskBySequence(backlog_id,project_sequence);
+        projectTaskRepository.delete(projectTask);
+    }
+
 }

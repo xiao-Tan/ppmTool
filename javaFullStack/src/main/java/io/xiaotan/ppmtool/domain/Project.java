@@ -34,7 +34,7 @@ public class Project {
     private Date updated_At;
 
     //OneToOne Relationship
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //ALL: when delete project, all his children gone
     @JsonIgnore
     private Backlog backlog;
 
