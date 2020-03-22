@@ -3,6 +3,7 @@ import ProjectTask from "./ProjectTasks/ProjectTask";
 
 class Backlog extends Component {
   render() {
+    const { project_tasks_props } = this.props;
     return (
       <div className="container">
         <div className="row">
@@ -12,8 +13,12 @@ class Backlog extends Component {
                 <h3>TO DO</h3>
               </div>
             </div>
-
-            <ProjectTask />
+            {
+              //traverse project_tasks list
+            }
+            {project_tasks_props.map(project_task => (
+              <ProjectTask key={project_task.id} project_task={project_task} />
+            ))}
           </div>
           <div className="col-md-4">
             <div className="card text-center mb-2">
