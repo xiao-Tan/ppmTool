@@ -62,16 +62,27 @@ export const getOneTask = (
 };
 
 export const updateTask = (
-  updatedTask,
   backlog_id,
   sequence_id,
+  updatedTask,
   history
 ) => async dispatch => {
   try {
     await axios.patch(
-      updatedTask,
-      `http://localhost:8080/api/backlog/${backlog_id}/${sequence_id}`
+      `http://localhost:8080/api/backlog/${backlog_id}/${sequence_id}`,
+      updatedTask
     );
     history.push(`/projectBoard/${backlog_id}`);
-  } catch (error) {}
+
+    //when backto form, error massage refresh to null
+    dispatch({
+      type: GET_ERRORS,
+      payload: {}
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
 };

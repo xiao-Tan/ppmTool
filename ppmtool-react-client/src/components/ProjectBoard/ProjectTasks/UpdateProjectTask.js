@@ -6,19 +6,19 @@ import { getOneTask, updateTask } from "../../../actions/backlogAction";
 import { Link } from "react-router-dom";
 
 class UpdateProjectTask extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
-    const { id } = this.props.match.params;
-    const { sequence } = this.props.match.params;
     this.state = {
+      id: "",
+      projectSequence: "",
       summary: "",
       acceptanceCriteria: "",
       status: "",
-      priority: 0,
+      priority: "",
       dueDate: "",
-      projectIdentifier: id,
-      projectSequence: sequence,
+      projectIdentifier: "",
+      create_At: "",
       errors: {}
     };
 
@@ -28,23 +28,27 @@ class UpdateProjectTask extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {
+      id,
+      projectSequence,
       summary,
       acceptanceCriteria,
       status,
       priority,
       dueDate,
       projectIdentifier,
-      projectSequence
+      create_At
     } = nextProps.project_task;
 
     this.setState({
+      id,
+      projectSequence,
       summary,
       acceptanceCriteria,
       status,
       priority,
       dueDate,
       projectIdentifier,
-      projectSequence
+      create_At
     });
   }
 
@@ -61,16 +65,21 @@ class UpdateProjectTask extends Component {
   onSubmit(e) {
     e.preventDefault();
     const updatedTask = {
+      id: this.state.id,
+      projectSequence: this.state.projectSequence,
       summary: this.state.summary,
       acceptanceCriteria: this.state.acceptanceCriteria,
       status: this.state.status,
       priority: this.state.priority,
-      dueDate: this.state.dueDate
+      dueDate: this.state.dueDate,
+      projectIdentifier: this.state.projectIdentifier,
+      create_At: this.state.create_At
     };
+
     this.props.updateTask(
-      updatedTask,
       this.state.projectIdentifier,
       this.state.projectSequence,
+      updatedTask,
       this.props.history
     );
   }
@@ -78,6 +87,7 @@ class UpdateProjectTask extends Component {
   render() {
     const { id } = this.props.match.params;
     const { sequence } = this.props.match.params;
+    const { errors } = this.props;
 
     return (
       <div className="add-PBI">
@@ -95,12 +105,17 @@ class UpdateProjectTask extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.summary
+                    })}
                     name="summary"
                     value={this.state.summary}
                     onChange={this.onChange}
                     placeholder="Project Task summary"
                   />
+                  {errors.summary && (
+                    <div className="invalid-feedback">{errors.summary}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <textarea
@@ -165,11 +180,13 @@ class UpdateProjectTask extends Component {
 UpdateProjectTask.propTypes = {
   getOneTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
-  project_task: PropTypes.object.isRequired
+  project_task: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  project_task: state.backlog.project_task
+  project_task: state.backlog.project_task,
+  errors: state.errors
 });
 
 export default connect(mapStateToProps, { getOneTask, updateTask })(
