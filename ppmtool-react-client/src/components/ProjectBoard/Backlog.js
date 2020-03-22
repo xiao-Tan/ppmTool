@@ -14,13 +14,13 @@ class Backlog extends Component {
     let done = [];
 
     for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].props.project_task.status == "TO_DO") {
+      if (tasks[i].props.project_task.status === "TO_DO") {
         todo.push(tasks[i]);
       }
-      if (tasks[i].props.project_task.status == "IN_PROGRESS") {
+      if (tasks[i].props.project_task.status === "IN_PROGRESS") {
         inProgress.push(tasks[i]);
       }
-      if (tasks[i].props.project_task.status == "DONE") {
+      if (tasks[i].props.project_task.status === "DONE") {
         done.push(tasks[i]);
       }
     }
