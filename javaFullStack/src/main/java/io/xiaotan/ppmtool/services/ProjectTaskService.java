@@ -1,7 +1,6 @@
 package io.xiaotan.ppmtool.services;
 
 import io.xiaotan.ppmtool.domain.Backlog;
-import io.xiaotan.ppmtool.domain.Project;
 import io.xiaotan.ppmtool.domain.ProjectTask;
 import io.xiaotan.ppmtool.exceptions.ProjectIDException;
 import io.xiaotan.ppmtool.exceptions.ProjectNotFoundException;
