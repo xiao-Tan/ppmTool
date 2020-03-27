@@ -2,9 +2,11 @@ package io.xiaotan.ppmtool.services;
 
 import io.xiaotan.ppmtool.domain.Backlog;
 import io.xiaotan.ppmtool.domain.Project;
+import io.xiaotan.ppmtool.domain.User;
 import io.xiaotan.ppmtool.exceptions.ProjectIDException;
 import io.xiaotan.ppmtool.repositories.BacklogRepository;
 import io.xiaotan.ppmtool.repositories.ProjectRepository;
+import io.xiaotan.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,16 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public Project saveOrUpdateProject(Project project) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public Project saveOrUpdateProject(Project project, String username) {
         String identifier = project.getProjectIdentifier().toUpperCase();
 
         try {
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(identifier);
 
             //如果project不存在，new一个新的backlog给project
