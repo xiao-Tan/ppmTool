@@ -25,6 +25,18 @@ public class ProjectService {
     public Project saveOrUpdateProject(Project project, String username) {
         String identifier = project.getProjectIdentifier().toUpperCase();
 
+        //update check:
+        if (project.getId() != null){
+            Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
+            //project user 与 当前token的user不符
+            if (existingProject != null && (!existingProject.getProjectLeader().equals(username))){
+                throw new ProjectIDException("project not found in your account.");
+                //要更改的project identifier不存在
+            }else if(existingProject == null){
+                throw new ProjectIDException("project with id '" + project.getProjectIdentifier()+"' not exist");
+            }
+        }
+
         try {
             User user = userRepository.findByUsername(username);
             project.setUser(user);
