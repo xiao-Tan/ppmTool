@@ -1,7 +1,49 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
+import { userRegister } from "../../actions/securityAction";
 
 class Register extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      fullName: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      errors: {}
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  //life cycle hooks to perform api
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    const newUser = {
+      fullName: this.state.fullName,
+      username: this.state.username,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    };
+    this.props.userRegister(newUser, this.props.history);
+  }
+
   render() {
+    const { errors } = this.state;
     return (
       <div className="register">
         <div className="container">
@@ -9,39 +51,69 @@ class Register extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
               <p className="lead text-center">Create your Account</p>
-              <form action="create-profile.html">
+              <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg"
-                    placeholder="Name"
-                    name="name"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.fullName
+                    })}
+                    placeholder="FullName"
+                    name="fullName"
+                    value={this.state.fullName}
+                    onChange={this.onChange}
                     required
                   />
+                  {errors.fullName && (
+                    <div className="invalid-feedback">{errors.fullName}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="email"
-                    className="form-control form-control-lg"
-                    placeholder="Email Address"
-                    name="email"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.username
+                    })}
+                    placeholder="Email Address (username)"
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.onChange}
                   />
+                  {errors.username && (
+                    <div className="invalid-feedback">{errors.username}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password
+                    })}
                     placeholder="Password"
                     name="password"
+                    value={this.state.password}
+                    onChange={this.onChange}
                   />
+                  {errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.confirmPassword
+                    })}
                     placeholder="Confirm Password"
-                    name="password2"
+                    name="confirmPassword"
+                    value={this.state.confirmPassword}
+                    onChange={this.onChange}
                   />
+                  {errors.confirmPassword && (
+                    <div className="invalid-feedback">
+                      {errors.confirmPassword}
+                    </div>
+                  )}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
@@ -53,4 +125,13 @@ class Register extends Component {
   }
 }
 
-export default Register;
+Register.propTypes = {
+  userRegister: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { userRegister })(Register);
