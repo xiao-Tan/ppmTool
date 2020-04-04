@@ -14,6 +14,27 @@ import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProj
 import Landing from "./components/Layout/Landing";
 import Login from "./components/UserManagement/Login";
 import Register from "./components/UserManagement/Register";
+import jwt_decode from "jwt-decode";
+import setJwtToken from "./securityutil/setJwtToken";
+import { SET_CURRENT_USER } from "./actions/types";
+
+//从localStorage里提取token，如果存在（即没过期）重新写入state
+const jwtToken = localStorage.jwtToken;
+if (jwtToken) {
+  setJwtToken(jwtToken);
+  const decode = jwt_decode(jwtToken);
+  store.dispatch({
+    type: SET_CURRENT_USER,
+    payload: decode
+  });
+}
+
+//如果过期了，清除，redirct到首页
+const currentTime = Date.now() / 1000;
+if (decode.exp < currentTime) {
+  //handle logout;
+  //window.location.href = "/"
+}
 
 function App() {
   return (
